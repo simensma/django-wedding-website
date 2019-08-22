@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 import datetime
 import uuid
 
+from django.contrib.auth.models import User
 from django.db import models
 from django.dispatch import receiver
 
@@ -33,6 +34,7 @@ class Party(models.Model):
     rehearsal_dinner = models.BooleanField(default=False)
     is_attending = models.NullBooleanField(default=None)
     comments = models.TextField(null=True, blank=True)
+    user = models.ForeignKey(User, null=True, blank=True)
 
     def __unicode__(self):
         return 'Party: {}'.format(self.name)

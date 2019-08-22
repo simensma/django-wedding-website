@@ -1,6 +1,9 @@
 import csv
 import StringIO
 import uuid
+
+from django.contrib.auth.models import User
+
 from guests.models import Party, Guest
 
 
@@ -23,6 +26,19 @@ def import_guests(path):
             if not party.invitation_id:
                 party.invitation_id = uuid.uuid4().hex
             party.save()
+
+            user = User.objects.filter(username=str(party.id)).first()
+
+            if not user:
+                user = User.objects.create_user(
+                    username=str(party.id),
+                    email=email,
+                    password=party.invitation_id
+                )
+
+                party.user_id = user.id
+                party.save(update_fields=['user_id'])
+
             if email:
                 guest, created = Guest.objects.get_or_create(party=party, email=email)
                 guest.first_name = first_name

@@ -3,10 +3,11 @@ from collections import namedtuple
 import random
 from datetime import datetime
 from django.conf import settings
+from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.db.models import Count, Q
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.shortcuts import render
 from django.views.generic import ListView
 from guests import csv_import
@@ -81,10 +82,17 @@ def invitation(request, invite_id):
         party.is_attending = party.any_guests_attending
         party.save()
         return HttpResponseRedirect(reverse('rsvp-confirm', args=[invite_id]))
-    return render(request, template_name='guests/invitation.html', context={
-        'party': party,
-        'meals': MEALS,
-    })
+
+    user = authenticate(request, username=str(party.id), password=invite_id)
+
+    if user is not None:
+        login(request, user)
+
+        return render(request, template_name='guests/invitation.html', context={
+            'party': party,
+            'meals': MEALS,
+        })
+    raise Http404()
 
 
 InviteResponse = namedtuple('InviteResponse', ['guest_pk', 'is_attending', 'meal'])
