@@ -26,11 +26,3 @@ handlers:
   script: bigday.wsgi.application
   secure: always
   redirect_http_response_code: 301
-
-skip_files:
-- ^(.*/)?#.*#$
-- ^(.*/)?.*~$
-- ^(.*/)?.*\.py[co]$
-- ^(.*/)?.*/RCS/.*$
-- ^(.*/)?\..*$
-- ^env/.*$

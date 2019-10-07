@@ -57,8 +57,15 @@
 
 }
 
+#save-the-date-carousel .item-zero {
+    background: url(../../images/save_the_date_bg_4.jpg) no-repeat center center fixed;
+    background-size: cover;
+    -moz-background-size: cover;
+
+}
+
 #save-the-date-carousel .item-one {
-    background: url(../../images/save_the_date_bg_2.jpg) no-repeat center center fixed;
+    background: url(../../images/save_the_date_bg_4.jpg) no-repeat center center fixed;
     background-size: cover;
     -moz-background-size: cover;
 

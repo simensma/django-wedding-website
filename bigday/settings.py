@@ -23,6 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '4*rsvB#@s6Cj&u&ZZFD#B#Eag&G$kbrBbH2DRVJ4YGTa5ukAv!q7fqfm9Sq1c0&VoA9cfa7&XfycX5q*88lN&APbGepombN5dENh'
 
 # SECURITY WARNING: don't run with debug turned on in production!
+#DEBUG = True
 DEBUG = False
 
 ALLOWED_HOSTS = ['*']
@@ -150,6 +151,7 @@ USE_TZ = True
 
 STATIC_ROOT = 'static_root'
 STATIC_URL = '/static/'
+
 STATICFILES_DIRS = (
     os.path.join('bigday', 'static'),
 )
