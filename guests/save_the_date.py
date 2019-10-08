@@ -116,24 +116,32 @@ def get_save_the_date_context(template_id):
 def send_save_the_date_email(context, recipients, test_only=False):
     context['email_mode'] = True
     context['rsvp_address'] = settings.DEFAULT_WEDDING_REPLY_EMAIL
-    template_html = render_to_string(SAVE_THE_DATE_TEMPLATE, context=context)
-    template_text = "Save the date for Amanda and Simen's wedding! July 2, 2016. Niagata-on-the-Lake, Ontario, Canada"
-    subject = 'Save the Date!'
+
+    with open('guests/save_the_date_email.html', 'r') as f:
+        template_html = f.read()
+        print template_html
+
+    template_text = "Save the date for Amanda and Simen's wedding! July 4, 2020. Victoria, BC, Canada"
+    subject = 'Amanda and Simen - Save the Date!'
     # https://www.vlent.nl/weblog/2014/01/15/sending-emails-with-embedded-images-in-django/
-    msg = EmailMultiAlternatives(subject, template_text, settings.DEFAULT_WEDDING_FROM_EMAIL, recipients,
-                                 reply_to=[settings.DEFAULT_WEDDING_REPLY_EMAIL])
+    msg = EmailMultiAlternatives(subject, template_text, 'simensma@gmail.com', recipients,
+                                 reply_to=['simensma@gmail.com'])
     msg.attach_alternative(template_html, "text/html")
     msg.mixed_subtype = 'related'
-    for filename in (context['header_filename'], context['main_image']):
-        attachment_path = os.path.join(os.path.dirname(__file__), 'static', 'save-the-date', 'images', filename)
-        with open(attachment_path, "rb") as image_file:
-            msg_img = MIMEImage(image_file.read())
-            msg_img.add_header('Content-ID', '<{}>'.format(filename))
-            msg.attach(msg_img)
+
+    # for filename in (context['header_filename'], context['main_image']):
+    #     attachment_path = os.path.join(os.path.dirname(__file__), 'static', 'save-the-date', 'images', filename)
+    #     with open(attachment_path, "rb") as image_file:
+    #         msg_img = MIMEImage(image_file.read())
+    #         msg_img.add_header('Content-ID', '<{}>'.format(filename))
+    #         msg.attach(msg_img)
 
     print 'sending {} to {}'.format(context['name'], ', '.join(recipients))
     if not test_only:
+        print 'Actually Sending'
         msg.send()
+    else:
+        print 'Not Sending - Just Testing'
 
 
 def clear_all_save_the_dates():
